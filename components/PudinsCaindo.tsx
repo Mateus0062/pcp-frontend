@@ -11,10 +11,10 @@ function pseudoAleatorio(i: number, semente: number) {
 }
 
 export default function PudinsCaindo() {
-    const pudins = Array.from({length: 30}, (_, i) => ({
-        left: pseudoAleatorio(i, 12.9898) * 100,
-        duracao: 12 + pseudoAleatorio(i, 78.233) * 8,
-        delay: -(pseudoAleatorio(i, 43.123) * 20)
+    const pudins = Array.from({length: 50}, (_, i) => ({
+        left: Number((pseudoAleatorio(i, 12.9898) * 100).toFixed(2)),
+        duracao: Number((12 + pseudoAleatorio(i, 78.233) * 8).toFixed(2)),
+        delay: Number((-(pseudoAleatorio(i, 43.123) * 20)).toFixed(2)),
     }));
 
     return (

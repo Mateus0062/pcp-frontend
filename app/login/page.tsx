@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import Logo from "../../assets/logo-caramelize.png"
+import Logo from "../../assets/logo-caramelize.png";
+import FotoLogin from "../../assets/foto Login.jpeg"
 import PudinsCaindo from "@/components/PudinsCaindo";
 
 export default function LoginPage() {
@@ -36,9 +37,6 @@ export default function LoginPage() {
                     <div className="w-full max-w-sm space-y-8">
                         <div className="flex flex-col items-center justify-center">
                             <Image src={Logo} alt="Logo Caramelize Puidim" className="w-40 mb-5"/>
-                            <h1 className="text-amber-800 font-bold text-2xl font-sans">
-                                Caramelize
-                            </h1>
                         </div>
 
                         <div>
@@ -81,20 +79,10 @@ export default function LoginPage() {
                     </div>
                 </div>
                 {/*lado da marca*/}
-                <div className="hidden lg:flex lg:flex-col w-3/5 bg-amber-950 justify-between p-12">
-                    <div className="flex text-creme">
-                        <h1 className="font-bold">Prodly</h1>
-                    </div>
+                <div className="hidden relative lg:flex lg:flex-col w-3/5 bg-amber-950 justify-between p-12">
+                    <Image src={FotoLogin} alt="Imagem Pudim para Tela de Login" fill priority className="object-cover"/>
 
-                    <div>
-                        <div className="flex w-full">
-                            <p className="text-xs uppercase tracking-widest text-stone-400">Caramelo</p>
-                        </div>            
-                    </div>
-
-                    <div className="flex">
-                        <p className="text-right text-sm font-sans">Todos os direitos reservados - Caramelize Pudim</p>
-                    </div>
+                    <div className="absolute inset-0 bg-black/40"/>
                 </div>
             </div>         
         </div>
