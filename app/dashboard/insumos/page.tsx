@@ -1,69 +1,119 @@
+"use client";
+
+import ModalEditarInsumo from "@/components/ModalEditarInsumo";
+import { Pencil, Trash2, X } from "lucide-react";
+import { useState } from "react";
+import { Insumo } from "@/types/insumo"
+
+const paletas = [
+    "bg-green-100 text-green-800",
+    "bg-blue-100 text-blue-800",
+    "bg-purple-100 text-purple-800"
+]
+
+function corDaCategoria(id: number) {
+    return paletas[id % paletas.length];
+}
+
+const format = new Intl.NumberFormat('pt-br', {
+    style: 'currency',
+    currency: 'BRL'
+});
+
+function handleDesativar(id: number) {
+    console.log("desativar", id)
+}
+
 export default function InsumosPage() {
     
+    const [insumoEditando, setInsumoEditando] = useState<Insumo | null>(null);
+
+    function handleEditar(Insumo: Insumo) {
+        setInsumoEditando(Insumo)
+    }
+
     const insumosMock = [
         { id: 1, nome: "Leite", unidadeMedida: "ml", estoqueMinimo: 500, custoUnitario: 4.50, categoria: { id: 1, nome: "Ingrediente" } },
         { id: 2, nome: "Forma de pudim", unidadeMedida: "un", estoqueMinimo: 50, custoUnitario: 1.20, categoria: { id: 2, nome: "Material" } },
     ];
 
     return (
-        <div className="p-8 w-full flex flex-col gap-8">
-            <div className="px-6 py-8 border-2 rounded-xl border-amber-800/20 bg-white shadow-sm flex flex-col justify-center items-center text-center">
-                <h1 className="text-3xl font-bold text-amber-900 mb-2">
+        <div className="p-8">
+            <div className="mb-8 border rounded-xl p-4 flex flex-col items-center bg-white border-amber-900">
+                <h1 className="text-3xl font-bold text-amber-900">
                     Insumos
                 </h1>
-                <p className="text-amber-700 font-medium">
+                <p className="text-amber-700 mt-1">
                     Gerencie os ingredientes e materiais do seu estoque.
                 </p>
             </div>
 
-            <div className="overflow-x-auto rounded-xl shadow-md border border-amber-800 bg-white">
-                <table className="w-full text-left border-collapse">
-                    {/* Cabeçalho mais escuro para contrastar com o texto claro */}
-                    <thead className="bg-amber-800 text-amber-50 uppercase text-sm font-semibold tracking-wider">
-                        <tr>
-                            <th className="py-4 px-6">Nome</th>
-                            <th className="py-4 px-6">Unidade</th>
-                            <th className="py-4 px-6">Estoque Mínimo</th>
-                            <th className="py-4 px-6">Custo</th>
-                            <th className="py-4 px-6">Categoria</th>
+            <div className="bg-white rounded-xl shadow-sm border border-amber-200 overflow-hidden">
+                <table className="w-full text-sm">
+                    <thead className="px-6 py-3 text-center font-semibold text-amber-50 uppercase text-xs tracking-wider bg-amber-900">
+                        <tr className="">
+                            <th className="px-6 py-4">Nome</th>
+                            <th className="px-6 py-4">Unidade</th>
+                            <th className="px-6 py-4">Estoque Mínimo</th>
+                            <th className="px-6 py-4">Custo</th>
+                            <th className="px-6 py-4">Categoria</th>
+                            <th className="px-6 py-4">Ações</th>
                         </tr>
                     </thead>
                     
-                    {/* Corpo da tabela recolocado */}
-                    <tbody className="text-sm text-amber-950 divide-y divide-amber-200">
+                    <tbody className="text-center">
                         {insumosMock.map((insumo) => (
-                            <tr key={insumo.id} className="hover:bg-amber-50 transition-colors">
-                                <td className="py-4 px-6 font-semibold">
+                            <tr key={insumo.id} className="border-t border-amber-100 hover:bg-amber-50 transition-colors">
+                                <td className="px-6 py-4 text-amber-900">
                                     {insumo.nome}
                                 </td>
-                                <td className="py-4 px-6">
-                                    <span className="bg-amber-200 text-amber-900 px-2 py-1 rounded-md text-xs font-bold uppercase border border-amber-300">
+                                <td className="px-6 py-4 text-amber-900">
+                                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
                                         {insumo.unidadeMedida}
                                     </span>
                                 </td>
-                                <td className="py-4 px-6 font-medium">
+                                <td className="px-6 py-4 text-amber-900">
                                     {insumo.estoqueMinimo}
                                 </td>
-                                <td className="py-4 px-6 font-bold text-emerald-700">
-                                    {new Intl.NumberFormat('pt-BR', { 
-                                        style: 'currency', 
-                                        currency: 'BRL' 
-                                    }).format(insumo.custoUnitario)}
+                                <td className="px-6 py-4 text-emerald-700">
+                                    {format.format(insumo.custoUnitario)}
                                 </td>
-                                <td className="py-4 px-6">
-                                    <span className={`px-3 py-1 rounded-full text-xs font-bold border 
-                                        ${insumo.categoria.nome === 'Ingrediente' 
-                                            ? 'bg-orange-100 text-orange-800 border-orange-200' 
-                                            : 'bg-yellow-100 text-yellow-800 border-yellow-200'}`}
-                                    >
+                                <td className="px-6 py-4">
+                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${corDaCategoria(insumo.categoria.id)}`}>
                                         {insumo.categoria.nome}
                                     </span>
+                                </td>
+                                <td className="px-6 py-4">
+                                    <div className="flex gap-2 justify-center">
+                                        <button title="Editar Insumo" aria-label="Editar Insumo" className="p-2 rounded-lg hover:bg-amber-100 transition-colors text-amber-400" onClick={() => handleEditar(insumo)}>
+                                            <Pencil size={18}/>
+                                        </button>
+                                        <button title="Desativar Insumo" aria-label="Desativar Insumo" className="p-2 rounded-lg hover:bg-amber-100 transition-colors text-red-600" onClick={() => handleDesativar(insumo.id)}>
+                                            <Trash2 size={18}/>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
+
+            {/* Seção de botão para cadastrar novo insumo*/}
+            <div className="w-full text-amber-800 px-4 py-2 mt-3">
+                <div className="flex justify-end items-end">
+                    <button title="Cadastrar Insumo" aria-label="Cadastrar Insumo" className="text-amber-50 bg-emerald-600 px-4 py-2 rounded-lg">
+                        Cadastrar Insumo
+                    </button>
+                </div>
+            </div>
+            
+            {insumoEditando && (
+                <ModalEditarInsumo 
+                    insumo = {insumoEditando}
+                    onFechar={() => setInsumoEditando(null)}
+                />
+            )}
         </div>
     )
 }
