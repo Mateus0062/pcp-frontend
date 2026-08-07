@@ -1,12 +1,10 @@
 "use client" 
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { X } from "lucide-react";
 
 type Props ={
     onFechar: () => void;
 }
-
-
 
 export default function ModalCadastrarCategoria({ onFechar}: Props) {
     const [nome, setNome] = useState("");
@@ -65,7 +63,7 @@ export default function ModalCadastrarCategoria({ onFechar}: Props) {
                             />
                         </div>
                         
-                        <button type="submit" className="mt-5 w-full rounded-md border text-white bg-amber-800 p-2 hover:bg-amber-950 transition-colors">Cadastrar Insumo</button>
+                        <button type="submit" className="mt-5 w-full rounded-md border text-white bg-amber-800 p-2 hover:bg-amber-950 transition-colors">Cadastrar Categoria</button>
                     </form>            
                 </div>
             </div>

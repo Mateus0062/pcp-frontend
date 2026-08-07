@@ -2,6 +2,8 @@
 import { Pencil, Trash2 } from "lucide-react"
 import { useState } from "react";
 import ModalCadastrarCategoria from "@/components/categoria/ModalCadastrarCategoria";
+import { Categoria } from "@/types/categoria";
+import ModalEditarCategoria from "@/components/categoria/ModalEditarCategoria";
 
 export default function CategoriasPage() {
 
@@ -11,7 +13,8 @@ export default function CategoriasPage() {
     ]
 
     const [cadastrando, setCadastrando] = useState(false);
-    
+    const [categoriaEditando, setCategoriaEditando] = useState<Categoria | null>(null);
+
     return (
         <div className="p-8">
             <div className="mb-8 border rounded-xl p-4 flex flex-col items-center bg-white border-amber-900">
@@ -40,7 +43,7 @@ export default function CategoriasPage() {
                                 </td>
                                 <td className="px-6 py-4">
                                     <div className="flex gap-2 justify-center">
-                                        <button title="Editar Insumo" aria-label="Editar Insumo" className="p-2 rounded-lg hover:bg-amber-100 transition-colors text-amber-400">
+                                        <button onClick={() => setCategoriaEditando(categoria)} title="Editar Insumo" aria-label="Editar Insumo" className="p-2 rounded-lg hover:bg-amber-100 transition-colors text-amber-400">
                                             <Pencil size={18}/>
                                         </button>
                                         <button title="Desativar Insumo" aria-label="Desativar Insumo" className="p-2 rounded-lg hover:bg-amber-100 transition-colors text-red-600">
@@ -66,7 +69,11 @@ export default function CategoriasPage() {
             {cadastrando && (
                 <ModalCadastrarCategoria onFechar={() => setCadastrando(false)} />
             )}
-            
+
+            {categoriaEditando && (
+                <ModalEditarCategoria categoria={categoriaEditando} onFechar={() => setCategoriaEditando(null)} />
+            )}
+
         </div>
     )
 }
