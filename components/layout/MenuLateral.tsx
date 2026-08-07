@@ -2,7 +2,7 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import Logo from "../assets/logo-caramelize.png";
+import Logo from "../../assets/logo-caramelize.png";
 import {House, Package, Tags } from "lucide-react";
 
 export default function MenuLateral() {

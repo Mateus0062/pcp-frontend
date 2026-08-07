@@ -1,6 +1,7 @@
 "use client";
 
-import ModalEditarInsumo from "@/components/ModalEditarInsumo";
+import ModalEditarInsumo from "@/components/insumo/ModalEditarInsumo";
+import ModalCadastrarInsumo from "@/components/insumo/ModalCadastrarInsumo";
 import { Pencil, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { Insumo } from "@/types/insumo"
@@ -27,6 +28,7 @@ function handleDesativar(id: number) {
 export default function InsumosPage() {
     
     const [insumoEditando, setInsumoEditando] = useState<Insumo | null>(null);
+    const [cadastrando, setCadastrando] = useState(false);
 
     function handleEditar(Insumo: Insumo) {
         setInsumoEditando(Insumo)
@@ -102,12 +104,16 @@ export default function InsumosPage() {
             {/* Seção de botão para cadastrar novo insumo*/}
             <div className="w-full text-amber-800 px-4 py-2 mt-3">
                 <div className="flex justify-end items-end">
-                    <button title="Cadastrar Insumo" aria-label="Cadastrar Insumo" className="text-amber-50 bg-emerald-600 px-4 py-2 rounded-lg">
+                    <button onClick={() => setCadastrando(true)} title="Cadastrar Insumo" aria-label="Cadastrar Insumo" className="text-amber-50 bg-emerald-600 px-4 py-2 rounded-lg hover:scale-105 transition transform duration-300 ease-in-out">
                         Cadastrar Insumo
                     </button>
                 </div>
             </div>
             
+            {cadastrando && (
+                <ModalCadastrarInsumo onFechar={() => setCadastrando(false)} />
+            )}
+
             {insumoEditando && (
                 <ModalEditarInsumo 
                     insumo = {insumoEditando}

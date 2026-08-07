@@ -1,4 +1,4 @@
-import MenuLateral from "@/components/MenuLateral";
+import MenuLateral from "@/components/layout/MenuLateral";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (
