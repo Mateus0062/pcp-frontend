@@ -43,10 +43,10 @@ export default function CategoriasPage() {
                                 </td>
                                 <td className="px-6 py-4">
                                     <div className="flex gap-2 justify-center">
-                                        <button onClick={() => setCategoriaEditando(categoria)} title="Editar Insumo" aria-label="Editar Insumo" className="p-2 rounded-lg hover:bg-amber-100 transition-colors text-amber-400">
+                                        <button onClick={() => setCategoriaEditando(categoria)} title="Editar Categoria" aria-label="Editar Categoria" className="p-2 rounded-lg hover:bg-amber-100 transition-colors text-amber-400">
                                             <Pencil size={18}/>
                                         </button>
-                                        <button title="Desativar Insumo" aria-label="Desativar Insumo" className="p-2 rounded-lg hover:bg-amber-100 transition-colors text-red-600">
+                                        <button title="Desativar Categoria" aria-label="Desativar Categoria" className="p-2 rounded-lg hover:bg-amber-100 transition-colors text-red-600">
                                             <Trash2 size={18}/>
                                         </button>
                                     </div>
