@@ -1,5 +1,6 @@
 import StatCard from "@/components/dashboard/StatCard"
-import { Package } from "lucide-react"
+import GraficoCategorias from "@/components/dashboard/GraficoCategorias"
+import { CheckCircle, Package, Tags } from "lucide-react"
 
 export default function DashboardPage() {
     const insumosMock = [
@@ -21,8 +22,8 @@ export default function DashboardPage() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <StatCard titulo="Insumos" valor={12} cor="border-l-amber-500" Icone={Package} />
-                <StatCard titulo="Categorias" valor={50} cor="border-l-emerald-500" Icone={Package}/>
+                <StatCard titulo="Insumos" valor={insumosMock.length} cor="border-l-amber-500" Icone={Package} />
+                <StatCard titulo="Categorias" valor={50} cor="border-l-emerald-500" Icone={Tags}/>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
@@ -32,15 +33,23 @@ export default function DashboardPage() {
                     {estoquebaixo.length > 0 ? (
                         <ul className="space-y-2">
                             {estoquebaixo.map((insumo) => (
-                                <li key={insumo.id} className="text-amber-700">
-                                    {insumo.nome} - Estoque: {insumo.estoqueAtual}/{insumo.estoqueMinimo}
+                                <li key={insumo.id} className="flex justify-between items-center py-2 border-b border-amber-100 last:border-0">
+                                    <span className="font-medium text-amber-900">{insumo.nome}</span>
+                                    <span className="text-sm">
+                                        <span className="font-bold text-red-600">{insumo.estoqueAtual}</span>
+                                        <span className="text-amber-400">/{insumo.estoqueMinimo}</span>
+                                    </span>
                                 </li>
                             ))}
                         </ul>
                     ) : (
-                        <p className="text-amber-500">Nenhum insumo com estoque baixo.</p>
+                        <div className="flex items-center gap-2 text-emerald-600 py-4">
+                            <CheckCircle size={20}/>
+                            <span>Nenhum insumo com estoque baixo.</span>
+                        </div>
                     )}
                 </div>
+                <GraficoCategorias />
             </div>
         </div>
     )
