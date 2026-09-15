@@ -126,6 +126,7 @@ export default function InsumosPage() {
                 <ModalEditarInsumo 
                     insumo = {insumoEditando}
                     onFechar={() => setInsumoEditando(null)}
+                    onEditado={carregarInsumos}
                 />
             )}
         </div>

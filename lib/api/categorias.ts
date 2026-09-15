@@ -32,8 +32,11 @@ export async function atualizarCategoria(id: number, dados: CriarCategoriaInput)
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dados),
     });
+
     if (!resposta.ok) {
         throw new Error("Erro ao atualizar categoria");
     }
+    
     return resposta.json();
 }
+

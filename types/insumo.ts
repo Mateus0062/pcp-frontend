@@ -14,3 +14,10 @@ export type CriarInsumoInput = {
     custoUnitario: number;
     categoriaId: number;
 };
+
+export type AtualizarInsumoInput = {
+    nome: string;
+    estoqueMinimo: number;
+    custoUnitario: number;
+    categoriaId: number;
+};

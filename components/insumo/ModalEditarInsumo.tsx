@@ -1,19 +1,29 @@
 "use client" 
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
 import { Insumo } from "@/types/insumo"
 import { X } from "lucide-react";
+import { Categoria } from "@/types/categoria";
+import { listarCategorias } from "@/lib/api/categorias";
+import { atualizarInsumo } from "@/lib/api/insumos";
 
 type Props = {
     insumo: Insumo;
     onFechar: () => void;
+    onEditado: () => void;
 };
 
-const categoriasMock = [
-    { id: 1, nome: "Ingrediente" },
-    { id: 2, nome: "Material" },
-];
-
-export default function ModalEditarInsumo({ insumo, onFechar}: Props) {
+export default function ModalEditarInsumo({ insumo, onFechar, onEditado }: Props) {
+    
+    // Inicio Listar Categorias
+    const [categorias, setCategorias] = useState<Categoria[]>([]);
+    
+    useEffect(() => {
+        listarCategorias().then((categorias) => setCategorias(categorias)).catch((error) => {
+            console.error("Erro ao listar categorias: ", error);
+        });
+    }, []);
+    // Fim Listar Categorias 
+    
     const [nome, setNome] = useState(insumo.nome);
     const [estoqueMinimo, setEstoqueMinimo] = useState(insumo.estoqueMinimo);
     const [custoUnitario, setCustoUnitario] = useState(insumo.custoUnitario);
@@ -23,22 +33,14 @@ export default function ModalEditarInsumo({ insumo, onFechar}: Props) {
         e.preventDefault();
 
         try {
-            const resposta  = await fetch(`http://localhost:8080/api/insumos/${insumo.id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ nome, estoqueMinimo, custoUnitario, categoriaId: categoriaId})
+            await atualizarInsumo(insumo.id, {
+                nome,
+                estoqueMinimo: Number(estoqueMinimo),
+                custoUnitario: Number(custoUnitario),
+                categoriaId: Number(categoriaId),
             });
-            
-            if(!resposta.ok) {
-                const erro = await resposta.json();
-                console.error("Erro da API: ", erro);
-                return
-            }
-
+            onEditado();
             onFechar();
-
-            const data = await resposta.json();
-
         } catch(error) {
             console.error("Erro: ", error)
         }
@@ -92,7 +94,7 @@ export default function ModalEditarInsumo({ insumo, onFechar}: Props) {
 
                             <label htmlFor="categoria" className="text-sm font-medium text-amber-700">Categoria</label>
                             <select value={categoriaId} onChange={(e) => setCategoriaId(Number(e.target.value))} className="mt-1 rounded-lg shadow-md border border-amber-800 px-3 py-2 text-amber-800 w-full">
-                                {categoriasMock.map((cat) => (
+                                {categorias.map((cat) => (
                                     <option key={cat.id} value={cat.id}>{cat.nome}</option>
                                 ))}
                             </select>
