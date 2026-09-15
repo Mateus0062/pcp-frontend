@@ -2,37 +2,24 @@
 import { FormEvent, useState } from "react";
 import { X } from "lucide-react";
 import { Categoria } from "@/types/categoria";
+import { atualizarCategoria } from "@/lib/api/categorias";
 
 type Props ={
     categoria: Categoria;
     onFechar: () => void;
+    onEditado: () => void;
 }
 
-export default function ModalEditarCategoria({ categoria, onFechar }: Props) {
+export default function ModalEditarCategoria({ categoria, onFechar, onEditado }: Props) {
     const [nome, setNome] = useState(categoria.nome);
 
     const handlerEditar = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try {
-            const resposta  = await fetch(`http://localhost:8080/api/categorias/${categoria.id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
-                    nome, 
-                   
-                })
-            });
-            
-            if(!resposta.ok) {
-                const erro = await resposta.json();
-                console.error("Erro da API: ", erro);
-                return
-            }
-
+            await atualizarCategoria(categoria.id, { nome });
+            onEditado();
             onFechar();
-            const data = await resposta.json();
-
         } catch(error) {
             console.error("Erro: ", error)
         }

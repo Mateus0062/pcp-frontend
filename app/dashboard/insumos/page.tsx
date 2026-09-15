@@ -3,8 +3,9 @@
 import ModalEditarInsumo from "@/components/insumo/ModalEditarInsumo";
 import ModalCadastrarInsumo from "@/components/insumo/ModalCadastrarInsumo";
 import { Pencil, Trash2, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Insumo } from "@/types/insumo"
+import { listarInsumos } from "@/lib/api/insumos";
 
 const paletas = [
     "bg-green-100 text-green-800",
@@ -29,15 +30,19 @@ export default function InsumosPage() {
     
     const [insumoEditando, setInsumoEditando] = useState<Insumo | null>(null);
     const [cadastrando, setCadastrando] = useState(false);
+    const [insumos, setInsumos] = useState<Insumo[]>([]);
+
+    useEffect(() => {
+        listarInsumos()
+            .then((dados) => setInsumos(dados))
+            .catch((erro) => console.error(erro));
+    }, []);
 
     function handleEditar(Insumo: Insumo) {
         setInsumoEditando(Insumo)
     }
 
-    const insumosMock = [
-        { id: 1, nome: "Leite", unidadeMedida: "ml", estoqueMinimo: 500, custoUnitario: 4.50, categoria: { id: 1, nome: "Ingrediente" } },
-        { id: 2, nome: "Forma de pudim", unidadeMedida: "un", estoqueMinimo: 50, custoUnitario: 1.20, categoria: { id: 2, nome: "Material" } },
-    ];
+    
 
     return (
         <div className="p-8">
@@ -64,7 +69,7 @@ export default function InsumosPage() {
                     </thead>
                     
                     <tbody className="text-center">
-                        {insumosMock.map((insumo) => (
+                        {insumos.map((insumo) => (
                             <tr key={insumo.id} className="border-t border-amber-100 hover:bg-amber-50 transition-colors">
                                 <td className="px-6 py-4 text-amber-900">
                                     {insumo.nome}

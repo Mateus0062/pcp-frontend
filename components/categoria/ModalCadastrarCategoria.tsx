@@ -1,35 +1,23 @@
 "use client" 
 import { useState } from "react";
 import { X } from "lucide-react";
+import { cadastrarCategoria } from "@/lib/api/categorias";
 
 type Props ={
     onFechar: () => void;
+    onCadastrado: () => void;
 }
 
-export default function ModalCadastrarCategoria({ onFechar}: Props) {
+export default function ModalCadastrarCategoria({ onFechar, onCadastrado }: Props) {
     const [nome, setNome] = useState("");
 
     const handlerCadastrar = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try {
-            const resposta  = await fetch(`http://localhost:8080/api/categorias`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
-                    nome, 
-                   
-                })
-            });
-            
-            if(!resposta.ok) {
-                const erro = await resposta.json();
-                console.error("Erro da API: ", erro);
-                return
-            }
-
-            const data = await resposta.json();
+            await cadastrarCategoria({ nome });
             onFechar();
+            onCadastrado();
 
         } catch(error) {
             console.error("Erro: ", error)

@@ -1,19 +1,24 @@
 "use client";
 import { Pencil, Trash2 } from "lucide-react"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalCadastrarCategoria from "@/components/categoria/ModalCadastrarCategoria";
 import { Categoria } from "@/types/categoria";
 import ModalEditarCategoria from "@/components/categoria/ModalEditarCategoria";
+import { listarCategorias } from "@/lib/api/categorias";
 
 export default function CategoriasPage() {
 
-    const categoriasMock = [
-        { id: 1, nome: "Ingrediente" },
-        { id: 2, nome: "Material" }
-    ]
-
     const [cadastrando, setCadastrando] = useState(false);
     const [categoriaEditando, setCategoriaEditando] = useState<Categoria | null>(null);
+    const [categorias, setCategorias] = useState<Categoria[]>([]);
+
+    function carregarCategorias() {
+        listarCategorias().then((dados) => setCategorias(dados)).catch((erro) => console.error(erro));
+    }
+
+    useEffect(() => {
+        carregarCategorias();
+    }, []);
 
     return (
         <div className="p-8">
@@ -36,7 +41,7 @@ export default function CategoriasPage() {
                     </thead>
 
                     <tbody className="text-center">
-                        {categoriasMock.map((categoria) => (
+                        {categorias.map((categoria) => (
                             <tr key={categoria.id} className="border-t border-amber-100 hover:bg-amber-50 transition-colors">
                                 <td className="px-6 py-4 text-amber-900">
                                     {categoria.nome}
@@ -67,11 +72,18 @@ export default function CategoriasPage() {
             </div>
             
             {cadastrando && (
-                <ModalCadastrarCategoria onFechar={() => setCadastrando(false)} />
+                <ModalCadastrarCategoria 
+                    onFechar={() => setCadastrando(false)} 
+                    onCadastrado={carregarCategorias}
+                />
             )}
 
             {categoriaEditando && (
-                <ModalEditarCategoria categoria={categoriaEditando} onFechar={() => setCategoriaEditando(null)} />
+                <ModalEditarCategoria 
+                    categoria={categoriaEditando} 
+                    onFechar={() => setCategoriaEditando(null)} 
+                    onEditado={carregarCategorias}
+                />
             )}
 
         </div>
