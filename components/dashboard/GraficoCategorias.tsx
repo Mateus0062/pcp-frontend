@@ -1,12 +1,11 @@
 "use client"
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
-const dados = [
-    { categoria: "Ingrediente", value: 12 },
-    { categoria: "Material", value: 8 }
-];
+type Props = {
+    dados: { categoria: string; value: number }[];
+};
 
-export default function GraficoCategorias() {
+export default function GraficoCategorias({ dados}: Props) {
     return (
         <div className="bg-white rounded-xl shadow-sm border border-amber-200 p-6">
             <h3 className="text-lg font-semibold text-amber-900 mb-4">

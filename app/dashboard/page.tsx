@@ -1,6 +1,13 @@
+"use client"
 import StatCard from "@/components/dashboard/StatCard"
 import GraficoCategorias from "@/components/dashboard/GraficoCategorias"
 import { CheckCircle, Package, Tags } from "lucide-react"
+import { Insumo } from "@/types/insumo";
+import { useEffect, useState } from "react";
+import { Categoria } from "@/types/categoria";
+import { listarInsumos } from "@/lib/api/insumos";
+import { listarCategorias } from "@/lib/api/categorias";
+
 
 export default function DashboardPage() {
     const insumosMock = [
@@ -8,8 +15,21 @@ export default function DashboardPage() {
         { id: 2, nome: "Forma de pudim", unidadeMedida: "un", estoqueMinimo: 50, estoqueAtual: 25, custoUnitario: 1.20, categoria: { id: 2, nome: "Material" } },
     ];
 
+    const [insumos, setInsumos] = useState<Insumo[]>([])
+    const [categorias, setCategorias] = useState<Categoria[]>([])
+
+    useEffect(() => {
+        listarInsumos().then(setInsumos).catch(console.error);
+        listarCategorias().then(setCategorias).catch(console.error);
+    }, [])
+
     const estoquebaixo = insumosMock.filter((insumo) => insumo.estoqueAtual < insumo.estoqueMinimo);
     
+    const dadosGrafico = categorias.map((categoria) => {
+        const quantidade = insumos.filter((insumo) => insumo.categoria.id === categoria.id).length;
+        return { categoria: categoria.nome, value: quantidade };
+    });
+
     return (
         <div className="p-8">
             <div className="items-start mb-4">
@@ -22,8 +42,8 @@ export default function DashboardPage() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <StatCard titulo="Insumos" valor={insumosMock.length} cor="border-l-amber-500" Icone={Package} />
-                <StatCard titulo="Categorias" valor={50} cor="border-l-emerald-500" Icone={Tags}/>
+                <StatCard titulo="Insumos" valor={insumos.length} cor="border-l-amber-500" Icone={Package} />
+                <StatCard titulo="Categorias" valor={categorias.length} cor="border-l-emerald-500" Icone={Tags}/>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
@@ -49,7 +69,8 @@ export default function DashboardPage() {
                         </div>
                     )}
                 </div>
-                <GraficoCategorias />
+
+                <GraficoCategorias dados={dadosGrafico} />
             </div>
         </div>
     )
