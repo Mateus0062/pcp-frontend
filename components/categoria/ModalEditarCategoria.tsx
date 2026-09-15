@@ -24,6 +24,7 @@ export default function ModalEditarCategoria({ categoria, onFechar, onEditado }:
             console.error("Erro: ", error)
         }
     }
+    
 
     return (
         <div className="fixed inset-0 bg-black/50 z-40 flex items-center justify-center">
