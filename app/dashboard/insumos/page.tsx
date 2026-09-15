@@ -32,17 +32,17 @@ export default function InsumosPage() {
     const [cadastrando, setCadastrando] = useState(false);
     const [insumos, setInsumos] = useState<Insumo[]>([]);
 
+    function carregarInsumos() {
+        listarInsumos().then((dados) => setInsumos(dados)).catch((erro) => console.error(erro));
+    }
+
     useEffect(() => {
-        listarInsumos()
-            .then((dados) => setInsumos(dados))
-            .catch((erro) => console.error(erro));
+        carregarInsumos();
     }, []);
 
     function handleEditar(Insumo: Insumo) {
         setInsumoEditando(Insumo)
     }
-
-    
 
     return (
         <div className="p-8">
@@ -116,7 +116,10 @@ export default function InsumosPage() {
             </div>
             
             {cadastrando && (
-                <ModalCadastrarInsumo onFechar={() => setCadastrando(false)} />
+                <ModalCadastrarInsumo 
+                    onFechar={() => setCadastrando(false)} 
+                    onCadastrado={carregarInsumos}
+                />
             )}
 
             {insumoEditando && (

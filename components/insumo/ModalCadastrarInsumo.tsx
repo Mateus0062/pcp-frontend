@@ -1,17 +1,23 @@
 "use client" 
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
 import { X } from "lucide-react";
+import { listarCategorias } from "@/lib/api/categorias";
+import { Categoria } from "@/types/categoria";
+import { cadastrarInsumo } from "@/lib/api/insumos";
 
 type Props ={
     onFechar: () => void;
+    onCadastrado: () => void;
 }
 
-const categoriasMock = [
-    { id: 1, nome: "Ingrediente" },
-    { id: 2, nome: "Material" },
-];
+export default function ModalCadastrarInsumo({ onFechar, onCadastrado }: Props) {
+    
+    const [categorias, setCategorias ] = useState<Categoria[]>([]);
 
-export default function ModalCadastrarInsumo({ onFechar}: Props) {
+    useEffect(() => {
+        listarCategorias().then((categorias) => setCategorias(categorias)).catch(console.error);
+    }, []);
+    
     const [nome, setNome] = useState("");
     const [estoqueMinimo, setEstoqueMinimo] = useState("");
     const [custoUnitario, setCustoUnitario] = useState("");
@@ -19,34 +25,21 @@ export default function ModalCadastrarInsumo({ onFechar}: Props) {
     const [categoriaId, setCategoriaId] = useState("");
 
     const handlerCadastrar = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        try {
-            const resposta  = await fetch(`http://localhost:8080/api/insumos`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
-                    nome, 
-                    estoqueMinimo: Number(estoqueMinimo), 
-                    custoUnitario: Number(custoUnitario), 
-                    unidadeMedida, 
-                    categoriaId: Number(categoriaId)
-                })
-            });
-            
-            if(!resposta.ok) {
-                const erro = await resposta.json();
-                console.error("Erro da API: ", erro);
-                return
-            }
-
-            const data = await resposta.json();
-            onFechar();
-
-        } catch(error) {
-            console.error("Erro: ", error)
-        }
+    e.preventDefault();
+    try {
+        await cadastrarInsumo({
+            nome,
+            unidadeMedida,
+            estoqueMinimo: Number(estoqueMinimo),
+            custoUnitario: Number(custoUnitario),
+            categoriaId: Number(categoriaId),
+        });
+        onCadastrado();
+        onFechar();
+    } catch (error) {
+        console.error("Erro:", error);
     }
+};
 
     return (
         <div className="fixed inset-0 bg-black/50 z-40 flex items-center justify-center">
@@ -106,7 +99,7 @@ export default function ModalCadastrarInsumo({ onFechar}: Props) {
 
                             <label htmlFor="categoria" className="text-sm font-medium text-amber-700">Categoria</label>
                             <select value={categoriaId} onChange={(e) => setCategoriaId(e.target.value)} className="mt-1 rounded-lg shadow-md border border-amber-800 px-3 py-2 text-amber-800 w-full">
-                                {categoriasMock.map((cat) => (
+                                {categorias.map((cat) => (
                                     <option key={cat.id} value={cat.id}>{cat.nome}</option>
                                 ))}
                             </select>
