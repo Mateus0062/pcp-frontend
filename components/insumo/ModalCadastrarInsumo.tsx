@@ -17,7 +17,13 @@ export default function ModalCadastrarInsumo({ onFechar, onCadastrado }: Props) 
     useEffect(() => {
         listarCategorias().then((categorias) => setCategorias(categorias)).catch(console.error);
     }, []);
-    
+
+    useEffect(() => {
+        if (categorias.length > 0 && categoriaId === "") {
+            setCategoriaId(String(categorias[0].id));
+        }
+    }, [categorias]);
+
     const [nome, setNome] = useState("");
     const [estoqueMinimo, setEstoqueMinimo] = useState("");
     const [custoUnitario, setCustoUnitario] = useState("");
